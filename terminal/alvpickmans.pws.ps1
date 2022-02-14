@@ -1,5 +1,3 @@
-
-
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
  
@@ -8,10 +6,18 @@ if ($host.Name -eq 'ConsoleHost')
     Import-Module PSReadLine
 }
 
+
+Function SetKopeFolder {Set-Location -Path "c:\code\kope"}
+Function SetGhFolder {Set-Location -Path "c:\code\gh"}
+
 Import-Module -Name Terminal-Icons
 set-alias desktop "Desktop.ps1"
+set-alias -Name cdkope -Value SetKopeFolder
+set-alias -Name cdgh -Value SetGhFolder
 
-oh-my-posh --init --shell pwsh --config "./themes/ohmyposh-alvpickmans.json" | Invoke-Expression
+$omp_config = Join-Path $PSScriptRoot '/themes/alvpickmans.omp.json' 
+
+oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
 
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
