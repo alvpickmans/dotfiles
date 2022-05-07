@@ -1,7 +1,8 @@
 " Text editor settings
 
+set expandtab
 " length of an actual \t character:
-set tabstop=4
+set tabstop=2
 " length to use when editing text (eg. TAB and BS keys)
 " (0 for ‘tabstop’, -1 for ‘shiftwidth’):
 set softtabstop=-1
@@ -26,3 +27,8 @@ set autoindent
 "set cindent
 " use language‐specific plugins for indenting (better):
 filetype plugin indent on
+
+" Spell checking
+set spelllang=en,cjk
+set spellsuggest=best,9
+nnoremap <silent> <S-F11> :set spell!<cr>

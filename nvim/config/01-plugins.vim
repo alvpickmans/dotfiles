@@ -12,6 +12,10 @@ Plug 'neovim/nvim-lspconfig'
 
 " Completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+\}
 
 " Files
 Plug 'nvim-lua/plenary.nvim'
@@ -25,6 +29,9 @@ Plug 'ryanoasis/vim-devicons'
 " C# configuration
 Plug 'Omnisharp/omnisharp-vim'
 Plug 'dense-analysis/ale'
+
+" Haxe
+Plug 'https://github.com/vshaxe/haxe-language-server.git', {'do': 'npm install & npx lix run vshaxe-build -t language-server'}
 
 call plug#end()
 

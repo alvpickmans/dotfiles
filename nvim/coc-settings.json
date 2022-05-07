@@ -1,4 +1,7 @@
 {
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "prettier.bracketSpacing": false,
 	"languageserver": {
 		"terraform":{
 			"command": "terraform-lsp",
@@ -9,6 +12,20 @@
 			],
 			"initializationOptions": {},
 			"settings": {}
-		}
+		},
+		"haxe": {
+            "command": "node",
+            "args": ["c:/Users/AlvaroPickmans/AppData/Local/nvim-data/plugged/haxe-language-server/bin/server.js"],
+            "filetypes": [
+				"haxe",
+				"hx"],
+            "trace.server": "verbose",
+            "initializationOptions": {
+                "displayArguments": ["build.hxml"]
+            },
+            "settings": {
+                "haxe.executable": "haxe"
+            }
+        }
 	}
 }
