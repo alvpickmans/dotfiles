@@ -8,4 +8,7 @@
     ~/Local Settings/nvim:
       relink: true
       path: nvim
+    ~/AppData/Roaming/nushell:
+      relink: true
+      path: nushell
 
