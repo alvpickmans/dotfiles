@@ -1,0 +1,11 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/Local Settings/nvim:
+      relink: true
+      path: nvim
+
