@@ -292,7 +292,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { 'c_sharp', 'lua', 'python', 'rust', 'tsx', 'typescript', 'help', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = true,
+  auto_install = false,
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -408,7 +408,10 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
+  clangd = {
+    cmd = {'csharp-ls'},
+    filetype = {'cs'}
+  },
   -- gopls = {},
   -- pyright = {},
   -- tsserver = {},
