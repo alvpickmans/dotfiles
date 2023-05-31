@@ -5,7 +5,7 @@
 - clean: ['~']
 
 - link:
-    ~/Local Settings/nvim:
+    ~/AppData/Local/nvim:
       relink: true
       path: nvim
     ~/AppData/Roaming/nushell:

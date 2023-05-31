@@ -1,8 +1,8 @@
 # Nushell Config File
 
 # Custom configuration
-alias cdkope = cd 'C:/code/kope'
-alias cdgh = cd 'C:/code/gh'
+alias cdk = cd '~/code/kope'
+alias cdg = cd '~/code/gh'
 alias cls = clear
 
 source ~/.cache/starship/init.nu
