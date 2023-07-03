@@ -2,7 +2,7 @@
 
 # Custom configuration
 alias cdk = cd '~/code/kope'
-alias cdg = cd '~/code/gh'
+alias cdg = cd '~/code/github'
 alias cls = clear
 
 source ~/.cache/starship/init.nu
