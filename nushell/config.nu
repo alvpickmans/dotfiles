@@ -4,6 +4,9 @@
 alias cdk = cd '~/code/kope'
 alias cdg = cd '~/code/github'
 alias cls = clear
+alias reboot = shutdown /r
+alias !reboot = shutdown /a
+alias reboot-now = shutdown /a /f
 
 source ~/.cache/starship/init.nu
 
@@ -304,7 +307,7 @@ let light_theme = {
 
 
 # The default config record. This is where much of your global configuration is setup.
-let-env config = {
+$env.config = {
 
   cursor_shape: {
     vi_insert: underscore
