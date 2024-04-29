@@ -8,7 +8,4 @@
     ~/.config/nvim:
       relink: true
       path: nvim
-    ~/.config/nushell:
-      relink: true
-      path: nushell
 

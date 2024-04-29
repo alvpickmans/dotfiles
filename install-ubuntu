@@ -2,6 +2,7 @@
 
 set -e
 
+export MSYS=winsymlinks:nativestrict
 CONFIG="install.ubuntu.yaml"
 DOTBOT_DIR="dotbot"
 
