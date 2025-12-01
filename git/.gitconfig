@@ -1,0 +1,4 @@
+[alias]
+st=status --short
+ac=commit -a -m
+sw=switch
