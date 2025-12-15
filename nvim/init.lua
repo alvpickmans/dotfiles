@@ -513,6 +513,9 @@ require('lazy').setup({
           end
 
           vim.diagnostic.enable(true)
+          vim.diagnostic.config {
+            virtual_lines = { current_line = true },
+          }
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
@@ -589,12 +592,6 @@ require('lazy').setup({
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
-
-          map('<leader>td', function()
-            vim.diagnostic.config {
-              virtual_lines = not vim.diagnostic.config().virtual_lines,
-            }
-          end, '[T]oggle Inlay [D]iagnostics')
         end,
       })
       -- Change diagnostic symbols in the sign column (gutter)
