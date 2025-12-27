@@ -634,7 +634,7 @@ require('lazy').setup({
         --
         --
         rust_analyzer = {},
-
+        superhtml = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },

@@ -5,15 +5,15 @@
 #==============
 # Variables
 #==============
-dotfiles_dir=`pwd`
+dotfiles_dir=$(dirname "$0")
 log_file=~/install_progress_log.txt
 
 #==============
 # Delete existing dot files and folders
 #==============
-rm -rf ~/.bashrc > /dev/null 2>&1
-rm -rf ~/.bash_aliases > /dev/null 2>&1
-rm -rf ~/.gitconfig > /dev/null 2>&1
+rm -rf ~/.bashrc >> $log_file #> /dev/null 2>&1
+rm -rf ~/.bash_aliases >> $log_file #> /dev/null 2>&1
+rm -rf ~/.gitconfig >> $log_file #> /dev/null 2>&1
 
 #==============
 # Create symlinks in the home folder
