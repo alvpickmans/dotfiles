@@ -32,6 +32,15 @@ elif [ ! -f /bin/bash ]; then
 fi
 
 #==============
+# Setup opencode service
+#==============
+if [ -f "$dotfiles_dir/opencode/service" ]; then
+  echo ""
+  echo "Setting up opencode service..."
+  bash "$dotfiles_dir/opencode/service"
+fi
+
+#==============
 # Done
 #==============
 echo ""

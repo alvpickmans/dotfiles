@@ -1,0 +1,95 @@
+#!/bin/bash
+
+ACTION="start"
+
+for arg in "$@"; do
+    case "$arg" in
+        --stop)
+            ACTION="stop"
+            ;;
+        --start)
+            ACTION="start"
+            ;;
+        *)
+            echo "Unknown argument: $arg"
+            exit 1
+            ;;
+    esac
+done
+
+detect_os() {
+    case "$(uname -s)" in
+        Linux*)     echo "linux" ;;
+        Darwin*)    echo "macos" ;;
+        CYGWIN*|MINGW*|MSYS*) echo "windows" ;;
+        *)          echo "unknown" ;;
+    esac
+}
+
+handle_linux() {
+    if [ -f "$SCRIPT_DIR/opencode-systemd.sh" ]; then
+        bash "$SCRIPT_DIR/opencode-systemd.sh" $ACTION
+    else
+        echo "Error: opencode-systemd.sh not found"
+        exit 1
+    fi
+}
+
+handle_macos() {
+    PLIST_DEST="$HOME/Library/LaunchAgents/opencode.serve.plist"
+    if [ "$ACTION" = "stop" ]; then
+        launchctl unload "$PLIST_DEST" 2>/dev/null
+        rm -f "$PLIST_DEST"
+        echo "OpenCode serve service removed from macOS"
+    else
+        if [ -f "$SCRIPT_DIR/opencode-launchd.plist" ]; then
+            cp "$SCRIPT_DIR/opencode-launchd.plist" "$PLIST_DEST"
+            launchctl load "$PLIST_DEST"
+            echo "OpenCode serve installed on macOS"
+        else
+            echo "Error: opencode-launchd.plist not found"
+            exit 1
+        fi
+    fi
+}
+
+handle_windows() {
+    if [ "$ACTION" = "stop" ]; then
+        if command -v pwsh &> /dev/null; then
+            pwsh -File "$SCRIPT_DIR/opencode-service.ps1" --stop
+        elif command -v powershell &> /dev/null; then
+            powershell -ExecutionPolicy Bypass -File "$SCRIPT_DIR/opencode-service.ps1" --stop
+        else
+            echo "Error: PowerShell not found"
+            exit 1
+        fi
+    else
+        if command -v pwsh &> /dev/null; then
+            pwsh -File "$SCRIPT_DIR/opencode-service.ps1"
+        elif command -v powershell &> /dev/null; then
+            powershell -ExecutionPolicy Bypass -File "$SCRIPT_DIR/opencode-service.ps1"
+        else
+            echo "Error: PowerShell not found"
+            exit 1
+        fi
+    fi
+}
+
+OS=$(detect_os)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+case "$OS" in
+    linux)
+        handle_linux
+        ;;
+    macos)
+        handle_macos
+        ;;
+    windows)
+        handle_windows
+        ;;
+    *)
+        echo "Unsupported OS: $OS"
+        exit 1
+        ;;
+esac
