@@ -124,3 +124,8 @@ set -o vi
 
 # opencode
 export PATH=/c/Users/AlvaroOrtega/.opencode/bin:$PATH
+
+# starship
+if command -v starship &> /dev/null; then
+    eval "$(starship init bash)"
+fi
