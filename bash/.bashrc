@@ -123,7 +123,7 @@ export CDPATH="$HOME/code;../"
 set -o vi
 
 # opencode
-export PATH=/c/Users/AlvaroOrtega/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 
 # starship
 if command -v starship &> /dev/null; then
