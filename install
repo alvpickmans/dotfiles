@@ -9,17 +9,18 @@ set -e
 #==============
 dotfiles_dir=$(dirname "$(readlink -f "$0")")
 
+create_link() {
+  ln -sf $1 $2
+  echo "  $1 -> $2"
+}
+
 #==============
 # Create symlinks in the home folder
 #==============
-ln -sf "$dotfiles_dir/bash/.bashrc" ~/.bashrc
-ln -sf "$dotfiles_dir/bash/.bash_aliases" ~/.bash_aliases
-ln -sf "$dotfiles_dir/git/.gitconfig" ~/.gitconfig
-
-echo "Created symlinks:"
-echo "  ~/.bashrc -> $dotfiles_dir/bash/.bashrc"
-echo "  ~/.bash_aliases -> $dotfiles_dir/bash/.bash_aliases"
-echo "  ~/.gitconfig -> $dotfiles_dir/git/.gitconfig"
+echo "Creating symlinks:"
+create_link "$dotfiles_dir/bash/.bashrc" ~/.bashrc
+create_link "$dotfiles_dir/bash/.bash_aliases" ~/.bash_aliases
+create_link "$dotfiles_dir/git/.gitconfig" ~/.gitconfig
 
 #==============
 # Set bash as the default shell (if not already bash)
@@ -39,6 +40,7 @@ if [ -f "$dotfiles_dir/opencode/service" ]; then
   echo "Setting up opencode service..."
   bash "$dotfiles_dir/opencode/service"
 fi
+
 
 #==============
 # Done
