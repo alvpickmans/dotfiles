@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! command -v opencode &> /dev/null; then
+    echo "Warning: 'opencode' command not found, skipping service"
+    exit 0
+fi
+
 ACTION="start"
 
 for arg in "$@"; do
@@ -35,7 +40,14 @@ handle_linux() {
     fi
 }
 
-
+handle_windows() {
+    if [ -f "$SCRIPT_DIR/opencode-windows.ps1" ]; then
+        powershell -ExecutionPolicy Bypass -File "$SCRIPT_DIR/opencode-windows.ps1" $ACTION
+    else
+        echo "Error: opencode-windows.ps1 not found"
+        exit 1
+    fi
+}
 
 OS=$(detect_os)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -43,6 +55,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 case "$OS" in
     linux)
         handle_linux
+        ;;
+    windows)
+        handle_windows
         ;;
     *)
         echo "opencode service not enabled on $OS"
