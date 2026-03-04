@@ -4,6 +4,10 @@
 
 set -e
 
+# Loading bash envs
+source ./bash/.bash_env
+
+
 #==============
 # Variables
 #==============
@@ -18,19 +22,21 @@ create_link() {
 # Create symlinks in the home folder
 #==============
 echo "Creating symlinks:"
-create_link "$dotfiles_dir/bash/.bashrc" ~/.bashrc
-create_link "$dotfiles_dir/bash/.bash_aliases" ~/.bash_aliases
-create_link "$dotfiles_dir/git/.gitconfig" ~/.gitconfig
+create_link "$dotfiles_dir/bash/.bashrc" $HOME/.bashrc
+create_link "$dotfiles_dir/bash/.bash_env" $HOME/.bash_env
+create_link "$dotfiles_dir/bash/.bash_aliases" $HOME/.bash_aliases
+create_link "$dotfiles_dir/git/.gitconfig" $HOME/.gitconfig
+create_link "$dotfiles_dir/nvim/" $XDG_CONFIG_HOME/$NVIM_APPNAME
 
 #==============
 # Set bash as the default shell (if not already bash)
 #==============
-if [ "$SHELL" != "/bin/bash" ] && [ -f /bin/bash ]; then
-  echo "Changing default shell to bash..."
-  chsh -s /bin/bash
-elif [ ! -f /bin/bash ]; then
-  echo "Warning: /bin/bash not found, skipping shell change"
-fi
+# if [ "$SHELL" != "/bin/bash" ] && [ -f /bin/bash ]; then
+#   echo "Changing default shell to bash..."
+#   chsh -s /bin/bash
+# elif [ ! -f /bin/bash ]; then
+#   echo "Warning: /bin/bash not found, skipping shell change"
+# fi
 
 #==============
 # Setup opencode service
