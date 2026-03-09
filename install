@@ -7,6 +7,11 @@ set -e
 # Loading bash envs
 source ./bash/.bash_env
 
+# Creating default bin directory
+if [ ! -d "$BIN" ]; then
+  echo "Creating $BIN directory"
+  mkdir $BIN
+fi
 
 #==============
 # Variables
@@ -27,6 +32,7 @@ create_link "$dotfiles_dir/bash/.bashrc" $HOME/.bashrc
 create_link "$dotfiles_dir/bash/.bash_env" $HOME/.bash_env
 create_link "$dotfiles_dir/bash/.bash_aliases" $HOME/.bash_aliases
 create_link "$dotfiles_dir/git/.gitconfig" $HOME/.gitconfig
+create_link "$dotfiles_dir/git/diff-so-fancy" $BIN/diff-so-fancy
 create_link "$dotfiles_dir/nvim/" $XDG_CONFIG_HOME/$NVIM_APPNAME
 
 #==============
@@ -57,3 +63,4 @@ echo "====== Summary ======"
 echo "Dotfiles installed successfully!"
 echo "Restart your shell or run: source ~/.bashrc"
 echo "Enjoy -Alv"
+
