@@ -1,9 +1,29 @@
 [user]
     email = aortegapickmans@gmail.com
     name = Alvaro Ortega Pickmans
+
+[includeIf "gitdir:~/work/"]
+    path = ~/work/.gitconfig
+
 [core]
     autocrlf = false
+    compression = 9
+    whitespace = error
+    preloadindex = true
+
 [alias]
-st="status --short"
-ac="commit -a -m"
-sw="switch"
+    st = "status --short"
+    ac = "commit -a -m"
+    sw = "switch"
+
+[init]
+    defaultBranch = main
+
+[status]
+    showStash = true
+    showUntrackedFiles = all
+
+[diff]
+    context = 3
+    renames = copies
+    interHunkContext = 10
