@@ -14,6 +14,7 @@ source ./bash/.bash_env
 dotfiles_dir=$(dirname "$(readlink -f "$0")")
 
 create_link() {
+  rm -rf $2
   ln -sf $1 $2
   echo "  $1 -> $2"
 }
