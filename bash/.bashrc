@@ -134,6 +134,9 @@ set -o vi
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
 
+# jrnl
+export PATH="$HOME/.jrnl/bin:$PATH"
+
 # starship
 if command -v starship &> /dev/null; then
     eval "$(starship init bash)"
