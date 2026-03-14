@@ -20,7 +20,7 @@ dotfiles_dir=$(dirname "$(readlink -f "$0")")
 
 create_link() {
   rm -rf $2
-  ln -sf $1 $2
+  ln -f $1 $2
   echo "  $1 -> $2"
 }
 
@@ -28,12 +28,12 @@ create_link() {
 # Create symlinks in the home folder
 #==============
 echo "Creating symlinks:"
-create_link "$dotfiles_dir/bash/.bashrc" $HOME/.bashrc
-create_link "$dotfiles_dir/bash/.bash_env" $HOME/.bash_env
-create_link "$dotfiles_dir/bash/.bash_aliases" $HOME/.bash_aliases
-create_link "$dotfiles_dir/git/.gitconfig" $HOME/.gitconfig
-create_link "$dotfiles_dir/git/diff-so-fancy" $BIN/diff-so-fancy
-create_link "$dotfiles_dir/nvim/" $XDG_CONFIG_HOME/$NVIM_APPNAME
+create_link "$dotfiles_dir/bash/.bashrc" "$HOME/.bashrc"
+create_link "$dotfiles_dir/bash/.bash_env" "$HOME/.bash_env"
+create_link "$dotfiles_dir/bash/.bash_aliases" "$HOME/.bash_aliases"
+create_link "$dotfiles_dir/git/.gitconfig" "$HOME/.gitconfig"
+create_link "$dotfiles_dir/git/diff-so-fancy" "$BIN/diff-so-fancy"
+create_link "$dotfiles_dir/nvim" "$XDG_CONFIG_HOME/$NVIM_APPNAME"
 
 #==============
 # Set bash as the default shell (if not already bash)
@@ -63,4 +63,3 @@ echo "====== Summary ======"
 echo "Dotfiles installed successfully!"
 echo "Restart your shell or run: source ~/.bashrc"
 echo "Enjoy -Alv"
-
