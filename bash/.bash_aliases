@@ -13,3 +13,5 @@ alias gu="git pull"
 
 alias gcl="git clone"
 
+alias lg="lazygit"
+

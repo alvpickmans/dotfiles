@@ -189,6 +189,34 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.api.nvim_create_user_command('Dos2Unix', function()
+  if vim.fn.executable 'dos2unix' == 0 then
+    vim.notify('dos2unix is not available in PATH', vim.log.levels.ERROR)
+    return
+  end
+
+  local file = vim.api.nvim_buf_get_name(0)
+  if file == '' then
+    vim.notify('Current buffer has no file path', vim.log.levels.ERROR)
+    return
+  end
+
+  if vim.bo.modified then
+    vim.cmd.write()
+  end
+
+  local output = vim.fn.system({ 'dos2unix', file })
+  if vim.v.shell_error ~= 0 then
+    vim.notify('dos2unix failed: ' .. output, vim.log.levels.ERROR)
+    return
+  end
+
+  vim.cmd.edit()
+  vim.notify('Converted to Unix line endings')
+end, { desc = 'Run dos2unix on current buffer' })
+
+vim.keymap.set('n', '<leader>CF', '<cmd>Dos2Unix<CR>', { desc = 'Convert file to Unix line endings' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -523,8 +551,47 @@ require('lazy').setup({
 
           vim.diagnostic.enable(true)
           vim.diagnostic.config {
-            virtual_lines = { current_line = true },
+            virtual_lines = false,
           }
+
+          map('gl', function()
+            vim.diagnostic.open_float(nil, {
+              scope = 'line',
+              wrap = true,
+              focusable = true,
+              border = 'rounded',
+              max_width = math.floor(vim.o.columns * 0.6),
+            })
+          end, 'Show [L]ine Diagnostics')
+
+          local diag_hover_group = vim.api.nvim_create_augroup('diag-hover-float', { clear = false })
+          local diag_float_win
+          vim.api.nvim_create_autocmd('CursorHold', {
+            buffer = event.buf,
+            group = diag_hover_group,
+            callback = function()
+              if diag_float_win and vim.api.nvim_win_is_valid(diag_float_win) then
+                return
+              end
+
+              local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+              local diags = vim.diagnostic.get(0, { lnum = lnum })
+              if vim.tbl_isempty(diags) then
+                return
+              end
+
+              local _, winid = vim.diagnostic.open_float(nil, {
+                scope = 'line',
+                wrap = true,
+                focusable = false,
+                close_events = { 'CursorMoved', 'CursorMovedI', 'BufHidden', 'InsertCharPre', 'WinLeave' },
+                border = 'rounded',
+                max_width = math.floor(vim.o.columns * 0.6),
+                source = 'if_many',
+              })
+              diag_float_win = winid
+            end,
+          })
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
