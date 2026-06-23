@@ -34,6 +34,7 @@ create_link "$dotfiles_dir/bash/.bash_aliases" "$HOME/.bash_aliases"
 create_link "$dotfiles_dir/git/.gitconfig" "$HOME/.gitconfig"
 create_link "$dotfiles_dir/git/diff-so-fancy" "$BIN/diff-so-fancy"
 create_link "$dotfiles_dir/nvim" "$XDG_CONFIG_HOME/$NVIM_APPNAME"
+create_link "$dotfiles_dir/agents" "$HOME/.agents"
 
 #==============
 # Set bash as the default shell (if not already bash)
