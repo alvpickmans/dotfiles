@@ -46,15 +46,6 @@ create_link "$dotfiles_dir/agents" "$HOME/.agents"
 #   echo "Warning: /bin/bash not found, skipping shell change"
 # fi
 
-#==============
-# Setup opencode service
-#==============
-if [ -f "$dotfiles_dir/opencode/service" ]; then
-  echo ""
-  echo "Setting up opencode service..."
-  bash "$dotfiles_dir/opencode/service"
-fi
-
 
 #==============
 # Done
