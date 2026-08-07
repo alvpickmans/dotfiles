@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage: jwt [TOKEN]
+       command-that-prints-token | jwt
+
+Decodes a JWT and prints JSON with header, payload, and signature properties.
+USAGE
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+if [[ $# -gt 1 ]]; then
+  echo "jwt: expected at most one token argument" >&2
+  usage >&2
+  exit 2
+fi
+
+if [[ $# -eq 1 ]]; then
+  raw_token="$1"
+elif [[ -p /dev/stdin ]]; then
+  raw_token="$(cat)"
+else
+  usage >&2
+  exit 2
+fi
+
+# Accept plain tokens, "Bearer <token>", or output that contains a token.
+token="$({ printf '%s' "$raw_token" | tr -d '\r\n' | grep -Eo '([Bb]earer[[:space:]]+)?[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*' | head -n 1; } || true)"
+token="$(printf '%s' "$token" | sed -E 's/^[Bb]earer[[:space:]]+//')"
+
+if [[ -z "$token" ]]; then
+  echo "jwt: no JWT found" >&2
+  exit 1
+fi
+
+IFS='.' read -r header_segment payload_segment signature extra <<< "$token"
+if [[ -n "${extra:-}" || -z "${header_segment:-}" || -z "${payload_segment:-}" ]]; then
+  echo "jwt: invalid JWT; expected three dot-separated parts" >&2
+  exit 1
+fi
+
+base64_decode() {
+  if base64 --help 2>&1 | grep -q -- '--decode'; then
+    base64 --decode
+  elif base64 -D </dev/null >/dev/null 2>&1; then
+    base64 -D
+  else
+    base64 -d
+  fi
+}
+
+b64url_decode() {
+  local segment="$1"
+  local padding=$(( (4 - ${#segment} % 4) % 4 ))
+
+  segment="${segment//-/+}"
+  segment="${segment//_/\/}"
+  printf '%s' "$segment"
+  if [[ "$padding" -gt 0 ]]; then
+    printf '=%.0s' $(seq 1 "$padding")
+  fi
+}
+
+decode_json() {
+  local segment="$1"
+  local name="$2"
+  local decoded
+
+  if ! decoded="$(b64url_decode "$segment" | base64_decode 2>/dev/null)"; then
+    echo "jwt: failed to base64url decode $name" >&2
+    exit 1
+  fi
+
+  if command -v jq >/dev/null 2>&1; then
+    if ! printf '%s' "$decoded" | jq -e . >/dev/null 2>&1; then
+      echo "jwt: decoded $name is not valid JSON" >&2
+      exit 1
+    fi
+  fi
+
+  printf '%s' "$decoded"
+}
+
+header_json="$(decode_json "$header_segment" header)"
+payload_json="$(decode_json "$payload_segment" payload)"
+
+if command -v jq >/dev/null 2>&1; then
+  jq -n \
+    --argjson header "$header_json" \
+    --argjson payload "$payload_json" \
+    --arg signature "$signature" \
+    '{header: $header, payload: $payload, signature: $signature}'
+else
+  cat <<JSON
+{
+  "header": $header_json,
+  "payload": $payload_json,
+  "signature": "$signature"
+}
+JSON
+fi
